@@ -1,18 +1,7 @@
 import { useState, useEffect } from 'react';
+import { allNames } from '../data/names';
 
 const LiveUsersTable = () => {
-  const allNames = [
-    'Brian', 'Mercy', 'Kelvin', 'Sharon', 'Daniel', 'Faith', 'Samuel', 'Cynthia', 'George', 'Mary',
-    'Evans', 'Stella', 'Peter', 'Lucy', 'Alex', 'Agnes', 'Michael', 'Rose', 'Vincent', 'Joyce',
-    'Moses', 'Janet', 'Elijah', 'Caroline', 'Collins', 'Irene', 'David', 'Beatrice', 'James', 'Dorcas',
-    'Anthony', 'Betty', 'Julius', 'Millicent', 'Fredrick', 'Ann', 'Patrick', 'Esther', 'Eric', 'Florence',
-    'Stephen', 'Naomi', 'Kennedy', 'Sarah', 'Charles', 'Lydia', 'Paul', 'Eunice', 'Nelson', 'Vivian',
-    'Oscar', 'Grace', 'Victor', 'Ruth', 'Bernard', 'Catherine', 'Felix', 'Alice', 'Jared', 'Hellen',
-    'Allan', 'Monica', 'Isaac', 'Lilian', 'Kevin', 'Phyllis', 'Francis', 'Joseph', 'Mark', 'Gideon',
-    'Dennis', 'Leah', 'Simon', 'Violet', 'Derrick', 'Diana', 'Elvis', 'Emmanuel', 'Raymond', 'Gladys',
-    'Nicholas', 'Miriam', 'Chris', 'Lawrence', 'Brenda', 'Steve', 'Peris', 'Susan', 'Thomas', 'Martha',
-    'Robert', 'Elizabeth', 'William', 'Margaret', 'Richard', 'Linda', 'John', 'Patricia', 'Matthew', 'Jennifer'
-  ];
   
   const [users, setUsers] = useState([]);
   const [usedNames, setUsedNames] = useState(new Set());
@@ -34,6 +23,8 @@ const LiveUsersTable = () => {
       name: selectedName,
       investment: Math.floor(Math.random() * 2900) + 100,
       status: Math.random() > 0.3 ? 'Paid' : 'Processing',
+      stage: Math.random() > 0.3 ? 2 : 1,
+      createdAt: Date.now(),
       id: Math.random()
     };
   };
@@ -56,16 +47,33 @@ const LiveUsersTable = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Progress from Processing (Big Chance payout) to Paid (amount payout)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      setUsers(prev => 
+        prev.map(user => {
+          if (user.stage === 1 && (now - user.createdAt) >= 4000) {
+            return { ...user, stage: 2, status: 'Paid' };
+          }
+          return user;
+        })
+      );
+    }, 1000); // Check every second
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="bg-gray-900 rounded-lg overflow-hidden">
-      <div className="max-h-96 overflow-y-auto">
-        <table className="w-full">
+      <div className="max-h-96 overflow-y-auto overflow-x-auto">
+        <table className="w-full min-w-full table-auto">
           <thead className="bg-gray-700 sticky top-0">
             <tr>
-              <th className="px-4 py-3 text-left text-white font-semibold">Name</th>
-              <th className="px-4 py-3 text-left text-white font-semibold">Investment</th>
-              <th className="px-4 py-3 text-left text-white font-semibold">Payout</th>
-              <th className="px-4 py-3 text-left text-white font-semibold">Status</th>
+              <th className="px-2 sm:px-4 py-3 text-left text-white font-semibold text-xs sm:text-sm whitespace-nowrap">Name</th>
+              <th className="px-2 sm:px-4 py-3 text-left text-white font-semibold text-xs sm:text-sm whitespace-nowrap">Investment</th>
+              <th className="px-2 sm:px-4 py-3 text-left text-white font-semibold text-xs sm:text-sm whitespace-nowrap">Payout</th>
+              <th className="px-2 sm:px-4 py-3 text-left text-white font-semibold text-xs sm:text-sm whitespace-nowrap">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -76,19 +84,23 @@ const LiveUsersTable = () => {
                   index === users.length - 1 ? 'animate-pulse bg-gray-800' : ''
                 }`}
               >
-                <td className="px-4 py-3 text-gray-300">{user.name}</td>
-                <td className="px-4 py-3 text-green-400 font-semibold">
+                <td className="px-2 sm:px-4 py-2 sm:py-3 text-gray-300 text-xs sm:text-sm font-medium whitespace-nowrap">{user.name}</td>
+                <td className="px-2 sm:px-4 py-2 sm:py-3 text-green-400 font-semibold text-xs sm:text-sm whitespace-nowrap">
                   KES {user.investment.toLocaleString()}
                 </td>
-                <td className="px-4 py-3 text-green-400 font-semibold">
-                  KES {Math.floor(user.investment * 3.5).toLocaleString()}
+                <td className="px-2 sm:px-4 py-2 sm:py-3 text-green-400 font-semibold text-xs sm:text-sm whitespace-nowrap">
+                  {user.stage === 1 ? (
+                    <span className="text-yellow-400 animate-pulse">Big Chance</span>
+                  ) : (
+                    `KES ${Math.floor(user.investment * 3.5).toLocaleString()}`
+                  )}
                 </td>
-                <td className="px-4 py-3">
-                  <span className={`px-2 py-1 rounded text-xs ${
+                <td className="px-2 sm:px-4 py-2 sm:py-3">
+                  <span className={`px-1 sm:px-2 py-1 rounded text-xs ${
                     user.status === 'Paid' 
                       ? 'bg-green-600 text-white' 
-                      : 'bg-yellow-600 text-white animate-pulse'
-                  }`}>
+                      : 'bg-blue-600 text-white animate-pulse'
+                  } whitespace-nowrap`}>
                     {user.status}
                   </span>
                 </td>
