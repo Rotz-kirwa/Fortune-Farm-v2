@@ -6,6 +6,11 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
-    assetsDir: 'assets'
+    assetsDir: 'assets',
+    target: 'es2015',
+    minify: 'terser'
+  },
+  esbuild: {
+    target: 'es2015'
   }
 })
