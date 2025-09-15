@@ -1,11 +1,11 @@
-# Chronicles - Investment Platform
+# Fortune Farm - Investment Platform
 
 A full-stack investment platform similar to MoneyTree, built with React + Vite frontend and Node.js + Express backend.
 
 ## Project Structure
 
 ```
-chronicles-4-10/
+fortune-farm/
 ├── backend/                 # Node.js + Express backend
 │   ├── src/
 │   │   ├── config/          # DB config, environment setup
@@ -39,7 +39,7 @@ chronicles-4-10/
 ### Backend Setup
 1. Navigate to backend directory: `cd backend`
 2. Install dependencies: `npm install`
-3. Create MySQL database named `chronicles_db`
+3. Create MySQL database named `fortune_farm_db`
 4. Update `.env` file with your database credentials
 5. Start development server: `npm run dev`
 

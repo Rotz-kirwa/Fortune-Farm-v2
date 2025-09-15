@@ -178,7 +178,7 @@ const Home = () => {
       <section className="py-16 px-4 bg-gray-800">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center text-white mb-12">
-            Why Choose Chronicles?
+            Why Choose Fortune Farm?
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div className="text-center p-6">
