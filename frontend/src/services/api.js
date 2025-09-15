@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'http://fortune-env.eba-hv84drhk.ap-south-1.elasticbeanstalk.com/api' 
+  ? 'https://your-railway-app.railway.app/api' 
   : 'http://localhost:5000/api';
 
-// AWS Elastic Beanstalk backend URL (HTTP)
+// Railway backend URL (replace with actual URL after deployment)
 
 const api = axios.create({
   baseURL: API_BASE_URL,

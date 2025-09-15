@@ -9,16 +9,19 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
       {/* Hero Section */}
-      <section className="pt-20">
+      <section className="pt-16 sm:pt-20 px-4 sm:px-0">
         <img 
           src="https://www.dropbox.com/scl/fi/jub3petorwv8sdt30rehx/sol-1.jpg?rlkey=79ja6w6l9ipxh2ak5p8x2j4pp&st=whq77py8&raw=1" 
           alt="Investment Hero" 
-          className="w-full rounded-lg shadow-2xl"
+          className="w-full h-64 sm:h-80 rounded-lg shadow-2xl object-cover"
+          loading="eager"
+          decoding="async"
+          style={{ backgroundColor: '#1f2937' }}
         />
       </section>
 
       {/* Scrolling Withdrawals Ticker */}
-      <div className="bg-green-600 py-3 overflow-hidden">
+      <div className="bg-green-600 py-2 sm:py-3 overflow-hidden">
         <div className="flex animate-scroll-continuous whitespace-nowrap">
           <div className="flex items-center space-x-12 text-white text-sm min-w-max">
             <div className="text-center"><div>+254796-XXXX-XX</div><div>just withdrew</div><div className="font-bold">KES 4077</div></div>
@@ -104,10 +107,10 @@ const Home = () => {
       </div>
 
       {/* Users Investment Table */}
-      <section className="py-8 px-4 bg-gray-800">
+      <section className="py-6 sm:py-8 px-4 bg-gray-800">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold text-white text-center mb-6">Recent Investments & Payouts</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-white text-center mb-4 sm:mb-6">Recent Investments & Payouts</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
             <LiveUsersTable />
             
             <LiveChart />
@@ -116,10 +119,10 @@ const Home = () => {
       </section>
 
       {/* How to Play Section */}
-      <section className="py-12 px-4 bg-gray-900">
+      <section className="py-8 sm:py-12 px-4 bg-gray-900">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold text-white text-center mb-8">How to Start Earning</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-6 sm:mb-8">How to Start Earning</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mb-4">
                 <span className="text-white font-bold text-xl">1</span>
