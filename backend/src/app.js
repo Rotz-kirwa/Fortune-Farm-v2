@@ -8,13 +8,9 @@ const userRoutes = require('./routes/user');
 const app = express();
 
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://fortune-farm.vercel.app',
-    'https://your-vercel-domain.vercel.app'
-  ],
-  credentials: true
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: false
 }));
 app.use(express.json());
 
