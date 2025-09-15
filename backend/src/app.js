@@ -7,7 +7,15 @@ const userRoutes = require('./routes/user');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://fortune-farm.vercel.app',
+    'https://your-vercel-domain.vercel.app'
+  ],
+  credentials: true
+}));
 app.use(express.json());
 
 app.use('/api/auth', authRoutes);
