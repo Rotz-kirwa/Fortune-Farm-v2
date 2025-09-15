@@ -4,15 +4,26 @@ const User = require('../models/User');
 
 const register = async (req, res) => {
   try {
+    console.log('Registration request:', req.body);
     const { email, password, name } = req.body;
+    
+    if (!email || !password || !name) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+    
     const hashedPassword = await bcrypt.hash(password, 10);
+    console.log('Password hashed successfully');
     
     const userId = await User.create({ email, password: hashedPassword, name });
-    const token = jwt.sign({ userId }, process.env.JWT_SECRET);
+    console.log('User created with ID:', userId);
+    
+    const token = jwt.sign({ userId }, process.env.JWT_SECRET || 'fallback-secret');
+    console.log('Token generated successfully');
     
     res.status(201).json({ token, user: { id: userId, email, name } });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Registration error:', error);
+    res.status(400).json({ message: error.message });
   }
 };
 

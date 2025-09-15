@@ -27,11 +27,21 @@ const Register = () => {
     setError('');
 
     try {
-      const response = await authAPI.register(response.data);
+      console.log('API_BASE_URL:', 'http://fortune-env.eba-hv84drhk.ap-south-1.elasticbeanstalk.com/api');
+      console.log('Registering with:', formData);
+      
+      // Test API connection first
+      const testResponse = await fetch('http://fortune-env.eba-hv84drhk.ap-south-1.elasticbeanstalk.com/api/test');
+      console.log('Test response status:', testResponse.status);
+      
+      const response = await authAPI.register(formData);
+      console.log('Registration response:', response);
       login(response.data);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed');
+      console.error('Registration error:', err);
+      console.error('Error details:', err.response);
+      setError(err.response?.data?.message || err.message || 'Registration failed');
     } finally {
       setLoading(false);
     }
