@@ -18,7 +18,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 
 app.get('/', (req, res) => {
-  res.json({ message: 'Fortune Farm API Server' });
+  res.json({ message: 'Fortune Farm API Server', status: 'running' });
+});
+
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'API is working', timestamp: new Date().toISOString() });
 });
 
 module.exports = app;
