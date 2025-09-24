@@ -27,12 +27,7 @@ const Register = () => {
     setError('');
 
     try {
-      console.log('API_BASE_URL:', 'http://fortune-env.eba-hv84drhk.ap-south-1.elasticbeanstalk.com/api');
       console.log('Registering with:', formData);
-      
-      // Test API connection first
-      const testResponse = await fetch('http://fortune-env.eba-hv84drhk.ap-south-1.elasticbeanstalk.com/api/test');
-      console.log('Test response status:', testResponse.status);
       
       const response = await authAPI.register(formData);
       console.log('Registration response:', response);
