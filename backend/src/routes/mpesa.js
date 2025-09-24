@@ -41,8 +41,12 @@ router.post('/stkpush', auth, async (req, res) => {
       TransactionDesc: 'Fortune Farm Deposit'
     };
 
+    const stkUrl = `${MPESA_CONFIG.base_url}/mpesa/stkpush/v1/processrequest`;
+    console.log('STK Push URL:', stkUrl);
+    console.log('STK Push Data:', JSON.stringify(stkPushData, null, 2));
+    
     const response = await axios.post(
-      `${MPESA_CONFIG.base_url}/mpesa/stkpush/v1/processrequest`,
+      stkUrl,
       stkPushData,
       {
         headers: {
@@ -67,11 +71,18 @@ router.post('/stkpush', auth, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('STK Push error:', error.response?.data || error.message);
+    console.error('STK Push error details:');
+    console.error('Status:', error.response?.status);
+    console.error('Data:', error.response?.data);
+    console.error('URL:', error.config?.url);
+    console.error('Message:', error.message);
+    
     res.status(500).json({ 
       success: false, 
       message: 'Payment initiation failed',
-      error: error.response?.data || error.message 
+      error: error.response?.data || error.message,
+      status: error.response?.status,
+      url: error.config?.url
     });
   }
 });
