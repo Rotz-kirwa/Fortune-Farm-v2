@@ -87,7 +87,7 @@ app.post('/api/mpesa/callback', async (req, res) => {
   }
 });
 
-app.post('/api/mpesa/stkpush', require('./middleware/auth'), async (req, res) => {
+app.post('/api/mpesa/stkpush', require('./middleware/auth').authenticateToken, async (req, res) => {
   try {
     const { phone_number, amount } = req.body;
     
