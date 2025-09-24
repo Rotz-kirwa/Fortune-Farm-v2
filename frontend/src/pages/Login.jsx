@@ -29,24 +29,24 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center py-12 px-4">
-      <div className="max-w-md w-full space-y-8">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center py-8 sm:py-12 px-4">
+      <div className="max-w-md w-full space-y-6 sm:space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
+          <h2 className="mt-4 sm:mt-6 text-center text-2xl sm:text-3xl font-extrabold text-white">
             Sign in to your account
           </h2>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-6 sm:mt-8 space-y-4 sm:space-y-6" onSubmit={handleSubmit}>
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
               {error}
             </div>
           )}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <input
               type="email"
               required
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 placeholder-gray-400"
+              className="w-full px-3 py-3 sm:py-2 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 placeholder-gray-400 text-base"
               placeholder="Email address"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -55,7 +55,7 @@ const Login = () => {
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
-                className="w-full px-3 py-2 pr-10 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 placeholder-gray-400"
+                className="w-full px-3 py-3 sm:py-2 pr-10 bg-gray-800 border border-gray-600 text-white rounded-md focus:outline-none focus:ring-green-500 focus:border-green-500 placeholder-gray-400 text-base"
                 placeholder="Password"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
@@ -73,7 +73,7 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50"
+            className="w-full flex justify-center py-3 sm:py-2 px-4 border border-transparent rounded-md shadow-sm text-base sm:text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>

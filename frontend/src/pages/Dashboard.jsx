@@ -9,12 +9,12 @@ const Dashboard = () => {
   const [referralAmount, setReferralAmount] = useState('');
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-gray-900 p-6">
+    <div className="min-h-screen bg-gray-900 pt-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-8 uppercase italic">Fortune Farm Dashboard</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-6 sm:mb-8 uppercase italic">Fortune Farm Dashboard</h1>
         
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
           <div className="bg-gray-800 p-6 rounded-lg shadow border border-gray-700">
             <div className="flex items-center">
               <DollarSign className="w-8 h-8 text-green-600" />

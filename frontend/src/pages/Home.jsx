@@ -9,14 +9,13 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800">
       {/* Hero Section */}
-      <section className="pt-16 sm:pt-20 px-4 sm:px-0">
+      <section>
         <img 
-          src="https://www.dropbox.com/scl/fi/jub3petorwv8sdt30rehx/sol-1.jpg?rlkey=79ja6w6l9ipxh2ak5p8x2j4pp&st=whq77py8&raw=1" 
+          src="https://www.dropbox.com/scl/fi/jub3petorwv8sdt30rehx/sol-1.jpg?rlkey=79ja6w6l9ipxh2ak5p8x2j4pp&st=82bsc4vb&raw=1" 
           alt="Investment Hero" 
-          className="w-full h-64 sm:h-80 rounded-lg shadow-2xl object-cover"
+          className="w-full mt-16 sm:mt-20"
           loading="eager"
           decoding="async"
-          style={{ backgroundColor: '#1f2937' }}
         />
       </section>
 
@@ -119,16 +118,16 @@ const Home = () => {
       </section>
 
       {/* How to Play Section */}
-      <section className="py-8 sm:py-12 px-4 bg-gray-900">
+      <section className="py-6 sm:py-8 lg:py-12 px-4 bg-gray-900">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-6 sm:mb-8">How to Start Earning</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-              <div className="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center mb-4">
-                <span className="text-white font-bold text-xl">1</span>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white text-center mb-4 sm:mb-6 lg:mb-8">How to Start Earning</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+            <div className="bg-gray-800 p-4 sm:p-6 rounded-lg border border-gray-700">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-600 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+                <span className="text-white font-bold text-lg sm:text-xl">1</span>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">Sign Up & Verify</h3>
-              <p className="text-gray-400 text-sm">Create account with name, email, password. Verify your identity for secure access.</p>
+              <h3 className="text-base sm:text-lg font-semibold text-white mb-2">Sign Up & Verify</h3>
+              <p className="text-gray-400 text-xs sm:text-sm">Create account with name, email, password. Verify your identity for secure access.</p>
             </div>
             
             <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
@@ -175,12 +174,12 @@ const Home = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-gray-800">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 bg-gray-800">
         <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center text-white mb-12">
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-center text-white mb-6 sm:mb-8 lg:mb-12">
             Why Choose Fortune Farm?
           </h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             <div className="text-center p-6">
               <Shield className="w-12 h-12 text-green-600 mx-auto mb-4" />
               <h3 className="text-xl font-semibold mb-2">Secure Platform</h3>
@@ -201,10 +200,10 @@ const Home = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-4 bg-green-600 text-white">
+      <section className="py-8 sm:py-12 lg:py-16 px-4 bg-green-600 text-white">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Investment Journey?</h2>
-          <p className="text-xl mb-8">Join thousands of investors building wealth with Fortune Farm</p>
+          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4">Ready to Start Your Investment Journey?</h2>
+          <p className="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8">Join thousands of investors building wealth with Fortune Farm</p>
           <Link 
             to={user ? "/deposit" : "/register"}
             className="bg-white text-gray-900 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-gray-100 transition"

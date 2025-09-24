@@ -40,7 +40,7 @@ const Deposit = () => {
     <div className="min-h-screen bg-gray-900 pt-20 px-4">
       <div className="max-w-4xl mx-auto">
         <TestMpesa />
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           
           {/* Deposit Section */}
           <div className="bg-gray-800 rounded-lg p-6 border border-gray-700">
@@ -53,7 +53,7 @@ const Deposit = () => {
             
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-white mb-4">Select an amount</h3>
-              <div className="grid grid-cols-3 gap-3 mb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4">
                 {quickAmounts.map((amt) => (
                   <button
                     key={amt}
@@ -61,7 +61,7 @@ const Deposit = () => {
                       setAmount(amt.toString());
                       setSelectedAmount(amt.toString());
                     }}
-                    className={`p-3 rounded-lg border transition ${
+                    className={`p-2 sm:p-3 rounded-lg border transition text-sm sm:text-base ${
                       selectedAmount === amt.toString()
                         ? 'border-green-500 bg-green-500 bg-opacity-20 text-green-400'
                         : 'border-gray-600 text-gray-300 hover:border-gray-500'
@@ -90,7 +90,7 @@ const Deposit = () => {
               <label className="block text-white mb-2">Phone Number to receive STK Push</label>
               <input
                 type="tel"
-                placeholder="07........"
+                placeholder="254........"
                 value={phoneNumber}
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 className="w-full px-4 py-3 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:border-green-500"
