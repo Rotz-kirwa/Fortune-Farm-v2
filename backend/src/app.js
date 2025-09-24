@@ -26,6 +26,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/mpesa', require('./routes/mpesa'));
 
 app.get('/', (req, res) => {
   console.log('Root endpoint hit');

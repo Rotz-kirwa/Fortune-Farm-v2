@@ -10,16 +10,25 @@ const Deposit = () => {
 
   const quickAmounts = [100, 500, 1000, 2000, 5000, 10000];
 
-  const handleDeposit = () => {
+  const handleDeposit = async () => {
     if (!amount || !phoneNumber) {
       alert('Please enter amount and phone number');
       return;
     }
-    invest(parseFloat(amount));
-    alert(`STK Push sent to ${phoneNumber} for KES ${amount}. Investment added to your portfolio!`);
-    setAmount('');
-    setPhoneNumber('');
-    setSelectedAmount('');
+    
+    try {
+      const { mpesaAPI } = await import('../services/mpesa');
+      const response = await mpesaAPI.initiatePayment(phoneNumber, amount);
+      
+      if (response.data.success) {
+        alert(`STK Push sent to ${phoneNumber} for KES ${amount}. Check your phone to complete payment.`);
+        setAmount('');
+        setPhoneNumber('');
+        setSelectedAmount('');
+      }
+    } catch (error) {
+      alert('Payment failed: ' + (error.response?.data?.message || error.message));
+    }
   };
 
   const handleWithdraw = () => {
