@@ -44,5 +44,18 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working', timestamp: new Date().toISOString() });
 });
 
+// Temporary M-Pesa routes
+app.get('/api/mpesa/test', (req, res) => {
+  res.json({ message: 'M-Pesa endpoint working', timestamp: new Date().toISOString() });
+});
+
+app.post('/api/mpesa/stkpush', (req, res) => {
+  res.json({ 
+    success: false, 
+    message: 'M-Pesa integration in progress - STK Push temporarily disabled',
+    timestamp: new Date().toISOString() 
+  });
+});
+
 console.log('App configuration complete');
 module.exports = app;
