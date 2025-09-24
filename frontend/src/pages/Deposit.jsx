@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Smartphone, Wallet, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import { useBalance } from '../context/BalanceContext';
+import TestMpesa from '../components/TestMpesa';
 
 const Deposit = () => {
   const { balance, invest } = useBalance();
@@ -38,6 +39,7 @@ const Deposit = () => {
   return (
     <div className="min-h-screen bg-gray-900 pt-20 px-4">
       <div className="max-w-4xl mx-auto">
+        <TestMpesa />
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           
           {/* Deposit Section */}
