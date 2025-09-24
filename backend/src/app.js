@@ -37,7 +37,7 @@ try {
 
 app.get('/', (req, res) => {
   console.log('Root endpoint hit');
-  res.json({ message: 'Fortune Farm API Server', status: 'running' });
+  res.json({ message: 'Fortune Farm API Server with M-Pesa', status: 'running', mpesa: 'enabled' });
 });
 
 app.get('/api/test', (req, res) => {
