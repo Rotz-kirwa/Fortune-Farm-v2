@@ -29,6 +29,11 @@ app.get('/api/mpesa/test', (req, res) => {
   res.json({ message: 'M-Pesa endpoint working', timestamp: new Date().toISOString() });
 });
 
+app.post('/api/mpesa/callback', (req, res) => {
+  console.log('M-Pesa Callback received:', JSON.stringify(req.body, null, 2));
+  res.json({ ResultCode: 0, ResultDesc: 'Success' });
+});
+
 app.post('/api/mpesa/stkpush', async (req, res) => {
   try {
     const { phone_number, amount } = req.body;
