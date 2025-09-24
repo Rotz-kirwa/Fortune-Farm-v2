@@ -87,11 +87,21 @@ app.post('/api/mpesa/stkpush', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('STK Push error:', error.response?.data || error.message);
+    console.error('=== STK Push Error Details ===');
+    console.error('Error message:', error.message);
+    console.error('Error status:', error.response?.status);
+    console.error('Error data:', JSON.stringify(error.response?.data, null, 2));
+    console.error('Request URL:', error.config?.url);
+    console.error('Request data:', JSON.stringify(error.config?.data, null, 2));
+    
     res.status(500).json({ 
       success: false, 
       message: 'Payment initiation failed',
-      error: error.response?.data || error.message 
+      error: error.response?.data || error.message,
+      details: {
+        status: error.response?.status,
+        url: error.config?.url
+      }
     });
   }
 });
