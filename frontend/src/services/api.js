@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-railway-app.railway.app/api' 
+  ? 'https://YOUR_RENDER_APP_NAME.onrender.com/api' 
   : 'http://localhost:5000/api';
 
-// Railway backend URL (replace with actual URL after deployment)
+// Replace YOUR_RENDER_APP_NAME with your actual Render app name
 
 const api = axios.create({
   baseURL: API_BASE_URL,
