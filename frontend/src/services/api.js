@@ -25,4 +25,4 @@ export const userAPI = {
   getProfile: () => api.get('/user/profile'),
 };
 
-export default api;
+export default api;// Force rebuild
