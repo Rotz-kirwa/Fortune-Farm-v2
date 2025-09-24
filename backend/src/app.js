@@ -1,4 +1,4 @@
-console.log('Loading app.js...');
+console.log('Loading app.js v2.0...');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
