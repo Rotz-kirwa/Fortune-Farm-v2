@@ -1,4 +1,4 @@
-console.log('Loading app.js v2.0...');
+console.log('Loading app.js v3.0 with M-Pesa...');
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
