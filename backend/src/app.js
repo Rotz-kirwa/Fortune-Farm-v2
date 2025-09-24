@@ -12,9 +12,9 @@ const app = express();
 console.log('Express app created');
 
 app.use(cors({
-  origin: "*",
+  origin: ["https://fortune-farm-murex.vercel.app", "http://localhost:5173"],
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: false
+  credentials: true
 }));
 app.use(express.json());
 
