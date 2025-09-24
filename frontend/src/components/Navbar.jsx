@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-gray-800 bg-opacity-90 backdrop-blur-sm border-b border-gray-700 text-white p-4 shadow-lg">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2 text-xl font-bold">
-          <DollarSign className="w-6 h-6" />
+          <DollarSign className="w-6 h-6 text-green-500" />
           <span className="uppercase italic">Fortune Farm</span>
         </Link>
         
@@ -18,10 +18,10 @@ const Navbar = () => {
           {user ? (
             <>
               {location.pathname !== '/' && (
-                <Link to="/" className="hover:text-gray-300">Main Board</Link>
+                <Link to="/" className="hover:text-green-300 text-green-400">Main Board</Link>
               )}
-              <Link to="/dashboard" className="hover:text-gray-300">Dashboard</Link>
-              <Link to="/deposit" className="hover:text-gray-300">
+              <Link to="/dashboard" className="hover:text-green-300 text-green-400">Dashboard</Link>
+              <Link to="/deposit" className="hover:text-green-300 text-green-400">
                 Account
               </Link>
               <div className="flex items-center space-x-2">
@@ -30,7 +30,7 @@ const Navbar = () => {
               </div>
               <button 
                 onClick={logout}
-                className="flex items-center space-x-1 hover:text-gray-300"
+                className="flex items-center space-x-1 hover:text-green-300 text-green-400"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Logout</span>

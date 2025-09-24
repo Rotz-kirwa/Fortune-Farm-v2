@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Deposit from './pages/Deposit';
+import Admin from './pages/Admin';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -43,6 +44,7 @@ function App() {
                   </ProtectedRoute>
                 } 
               />
+              <Route path="/admin" element={<Admin />} />
             </Routes>
           </div>
         </Router>
