@@ -6,6 +6,11 @@ const auth = require('../middleware/auth');
 
 const router = express.Router();
 
+// Test route
+router.get('/test', (req, res) => {
+  res.json({ message: 'M-Pesa routes working', timestamp: new Date().toISOString() });
+});
+
 // STK Push - Initiate payment
 router.post('/stkpush', auth, async (req, res) => {
   try {

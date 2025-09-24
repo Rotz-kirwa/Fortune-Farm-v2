@@ -26,7 +26,14 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/mpesa', require('./routes/mpesa'));
+
+try {
+  const mpesaRoutes = require('./routes/mpesa');
+  app.use('/api/mpesa', mpesaRoutes);
+  console.log('M-Pesa routes loaded successfully');
+} catch (error) {
+  console.error('Failed to load M-Pesa routes:', error.message);
+}
 
 app.get('/', (req, res) => {
   console.log('Root endpoint hit');
