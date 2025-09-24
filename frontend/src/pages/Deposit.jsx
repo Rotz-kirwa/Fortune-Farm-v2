@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Smartphone, Wallet, ArrowUpCircle, ArrowDownCircle } from 'lucide-react';
 import { useBalance } from '../context/BalanceContext';
 import TestMpesa from '../components/TestMpesa';
+import { mpesaAPI } from '../services/mpesa';
 
 const Deposit = () => {
   const { balance, invest } = useBalance();
@@ -18,7 +19,6 @@ const Deposit = () => {
     }
     
     try {
-      const { mpesaAPI } = await import('../services/mpesa');
       const response = await mpesaAPI.initiatePayment(phoneNumber, amount);
       
       if (response.data.success) {
