@@ -46,8 +46,35 @@ app.post('/api/mpesa/callback', async (req, res) => {
         
         console.log(`Payment successful: ${amount} KES from ${phoneNumber}, Receipt: ${mpesaReceiptNumber}`);
         
-        // Here you would update user balance in database
-        // For now, just log the success
+        // Extract user ID from AccountReference (format: FT{userId}_{timestamp})
+        const accountRef = metadata.find(item => item.Name === 'AccountReference')?.Value;
+        const userIdMatch = accountRef?.match(/FT(\d+)_/);
+        const userId = userIdMatch ? userIdMatch[1] : null;
+        
+        if (userId && userId !== 'guest') {
+          try {
+            const { initDatabase } = require('./config/database');
+            const db = await initDatabase();
+            
+            // Update user balance
+            await db.run(
+              'UPDATE users SET balance = balance + ? WHERE id = ?',
+              [amount, userId]
+            );
+            
+            // Record transaction
+            await db.run(
+              'INSERT INTO transactions (user_id, transaction_id, phone_number, amount, type, status, mpesa_receipt_number) VALUES (?, ?, ?, ?, ?, ?, ?)',
+              [userId, accountRef, phoneNumber, amount, 'deposit', 'completed', mpesaReceiptNumber]
+            );
+            
+            console.log(`✅ Balance updated: User ${userId} +${amount} KES`);
+          } catch (dbError) {
+            console.error('Database update error:', dbError);
+          }
+        } else {
+          console.log('⚠️ No user ID found in transaction reference');
+        }
       } else {
         console.log('Payment failed or cancelled');
       }
@@ -60,7 +87,7 @@ app.post('/api/mpesa/callback', async (req, res) => {
   }
 });
 
-app.post('/api/mpesa/stkpush', async (req, res) => {
+app.post('/api/mpesa/stkpush', require('./middleware/auth'), async (req, res) => {
   try {
     const { phone_number, amount } = req.body;
     
@@ -97,7 +124,7 @@ app.post('/api/mpesa/stkpush', async (req, res) => {
       PartyB: MPESA_CONFIG.business_short_code,
       PhoneNumber: phone_number,
       CallBackURL: 'https://fortune-farm.onrender.com/api/mpesa/callback',
-      AccountReference: `FT${Date.now()}`,
+      AccountReference: `FT${req.user?.id || 'guest'}_${Date.now()}`,
       TransactionDesc: 'Fortune Farm Deposit'
     };
 
