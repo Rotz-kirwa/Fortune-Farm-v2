@@ -1,38 +1,33 @@
-const app = require('./app');
-const { initDatabase } = require('./config/database');
+console.log('Starting Fortune Farm server...');
+console.log('Node version:', process.version);
+console.log('Environment:', process.env.NODE_ENV);
+console.log('Port:', process.env.PORT);
 
+const app = require('./app');
 const PORT = process.env.PORT || 10000;
 
-const startServer = async () => {
-  try {
-    // Initialize database first
-    await initDatabase();
-    console.log('Database initialized successfully');
-    
-    // Start server
-    const server = app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-    
-    // Graceful shutdown
-    process.on('SIGTERM', () => {
-      console.log('SIGTERM received, shutting down gracefully');
-      server.close(() => {
-        process.exit(0);
-      });
-    });
-    
-    process.on('SIGINT', () => {
-      console.log('SIGINT received, shutting down gracefully');
-      server.close(() => {
-        process.exit(0);
-      });
-    });
-    
-  } catch (error) {
-    console.error('Failed to start server:', error);
-    process.exit(1);
-  }
-};
+console.log('App loaded, starting server on port:', PORT);
 
-startServer();
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ Fortune Farm server running on port ${PORT}`);
+  console.log(`Server URL: http://0.0.0.0:${PORT}`);
+});
+
+server.on('error', (error) => {
+  console.error('❌ Server error:', error);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught Exception:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received, shutting down gracefully');
+  server.close(() => {
+    process.exit(0);
+  });
+});
