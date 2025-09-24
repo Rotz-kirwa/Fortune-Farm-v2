@@ -29,9 +29,35 @@ app.get('/api/mpesa/test', (req, res) => {
   res.json({ message: 'M-Pesa endpoint working', timestamp: new Date().toISOString() });
 });
 
-app.post('/api/mpesa/callback', (req, res) => {
-  console.log('M-Pesa Callback received:', JSON.stringify(req.body, null, 2));
-  res.json({ ResultCode: 0, ResultDesc: 'Success' });
+app.post('/api/mpesa/callback', async (req, res) => {
+  try {
+    console.log('M-Pesa Callback received:', JSON.stringify(req.body, null, 2));
+    
+    const { Body } = req.body;
+    if (Body && Body.stkCallback) {
+      const { ResultCode, CallbackMetadata } = Body.stkCallback;
+      
+      if (ResultCode === 0 && CallbackMetadata) {
+        // Payment successful
+        const metadata = CallbackMetadata.Item;
+        const amount = metadata.find(item => item.Name === 'Amount')?.Value;
+        const phoneNumber = metadata.find(item => item.Name === 'PhoneNumber')?.Value;
+        const mpesaReceiptNumber = metadata.find(item => item.Name === 'MpesaReceiptNumber')?.Value;
+        
+        console.log(`Payment successful: ${amount} KES from ${phoneNumber}, Receipt: ${mpesaReceiptNumber}`);
+        
+        // Here you would update user balance in database
+        // For now, just log the success
+      } else {
+        console.log('Payment failed or cancelled');
+      }
+    }
+    
+    res.json({ ResultCode: 0, ResultDesc: 'Success' });
+  } catch (error) {
+    console.error('Callback error:', error);
+    res.json({ ResultCode: 1, ResultDesc: 'Error' });
+  }
 });
 
 app.post('/api/mpesa/stkpush', async (req, res) => {
@@ -134,6 +160,17 @@ app.get('/api/status', (req, res) => {
     mpesa: 'integrated',
     routes: ['/api/mpesa/test', '/api/mpesa/stkpush'],
     timestamp: new Date().toISOString() 
+  });
+});
+
+// Temporary endpoint to add balance for testing
+app.post('/api/test/add-balance', (req, res) => {
+  const { amount } = req.body;
+  console.log(`Test: Adding ${amount} KES to user balance`);
+  res.json({ 
+    success: true, 
+    message: `Added ${amount} KES to balance`,
+    note: 'This is a test endpoint - in production, balance updates via M-Pesa callback'
   });
 });
 
