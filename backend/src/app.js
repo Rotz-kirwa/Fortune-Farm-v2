@@ -106,7 +106,20 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/test', (req, res) => {
-  res.json({ message: 'API is working', timestamp: new Date().toISOString() });
+  res.json({ 
+    message: 'API is working', 
+    mpesa_routes: 'loaded',
+    timestamp: new Date().toISOString() 
+  });
+});
+
+app.get('/api/status', (req, res) => {
+  res.json({ 
+    server: 'Fortune Farm',
+    mpesa: 'integrated',
+    routes: ['/api/mpesa/test', '/api/mpesa/stkpush'],
+    timestamp: new Date().toISOString() 
+  });
 });
 
 console.log('App configuration complete');
