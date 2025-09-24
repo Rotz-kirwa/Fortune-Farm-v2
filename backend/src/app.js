@@ -40,7 +40,7 @@ app.post('/api/mpesa/stkpush', async (req, res) => {
     const MPESA_CONFIG = {
       consumer_key: 'QrUdWSBOAgCC8Ky60sGssRAA9NnNuy8rDxrWYGoBIEIOcxqn',
       consumer_secret: 'AXzu4uZeYD3GnFOTK9w8jnI0VjqC8R6LpKnGW0kgPaENuqvaJjAazi9J3KbfqBTz',
-      business_short_code: '4185659',
+      business_short_code: '174379',
       passkey: 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919',
       base_url: 'https://sandbox.safaricom.co.ke'
     };
