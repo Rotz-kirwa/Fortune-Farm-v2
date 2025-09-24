@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://fortune-farm.onrender.com/api';
+const API_BASE_URL = 'https://fortune-farm.onrender.com/api';
 
 console.log('Environment variable VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 console.log('Final API_BASE_URL:', API_BASE_URL);
