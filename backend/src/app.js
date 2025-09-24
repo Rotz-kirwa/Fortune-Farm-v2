@@ -49,12 +49,73 @@ app.get('/api/mpesa/test', (req, res) => {
   res.json({ message: 'M-Pesa endpoint working', timestamp: new Date().toISOString() });
 });
 
-app.post('/api/mpesa/stkpush', (req, res) => {
-  res.json({ 
-    success: false, 
-    message: 'M-Pesa integration in progress - STK Push temporarily disabled',
-    timestamp: new Date().toISOString() 
-  });
+app.post('/api/mpesa/stkpush', async (req, res) => {
+  try {
+    const { phone_number, amount } = req.body;
+    
+    if (!phone_number || !amount) {
+      return res.status(400).json({ message: 'Phone number and amount required' });
+    }
+
+    // M-Pesa configuration
+    const MPESA_CONFIG = {
+      consumer_key: 'QrUdWSBOAgCC8Ky60sGssRAA9NnNuy8rDxrWYGoBIEIOcxqn',
+      consumer_secret: 'AXzu4uZeYD3GnFOTK9w8jnI0VjqC8R6LpKnGW0kgPaENuqvaJjAazi9J3KbfqBTz',
+      business_short_code: '4185659',
+      passkey: 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919',
+      base_url: 'https://sandbox.safaricom.co.ke'
+    };
+
+    // Get access token
+    const axios = require('axios');
+    const auth = Buffer.from(`${MPESA_CONFIG.consumer_key}:${MPESA_CONFIG.consumer_secret}`).toString('base64');
+    
+    const tokenResponse = await axios.get(`${MPESA_CONFIG.base_url}/oauth/v1/generate?grant_type=client_credentials`, {
+      headers: { Authorization: `Basic ${auth}` }
+    });
+    
+    const access_token = tokenResponse.data.access_token;
+    const timestamp = new Date().toISOString().replace(/[^0-9]/g, '').slice(0, -3);
+    const password = Buffer.from(`${MPESA_CONFIG.business_short_code}${MPESA_CONFIG.passkey}${timestamp}`).toString('base64');
+    
+    const stkPushData = {
+      BusinessShortCode: MPESA_CONFIG.business_short_code,
+      Password: password,
+      Timestamp: timestamp,
+      TransactionType: 'CustomerPayBillOnline',
+      Amount: amount,
+      PartyA: phone_number,
+      PartyB: MPESA_CONFIG.business_short_code,
+      PhoneNumber: phone_number,
+      CallBackURL: 'https://fortune-farm.onrender.com/api/mpesa/callback',
+      AccountReference: `FT${Date.now()}`,
+      TransactionDesc: 'Fortune Farm Deposit'
+    };
+
+    const stkUrl = `${MPESA_CONFIG.base_url}/mpesa/stkpush/v1/processrequest`;
+    console.log('STK Push URL:', stkUrl);
+    
+    const response = await axios.post(stkUrl, stkPushData, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    res.json({
+      success: true,
+      message: 'STK Push sent successfully',
+      checkout_request_id: response.data.CheckoutRequestID
+    });
+
+  } catch (error) {
+    console.error('STK Push error:', error.response?.data || error.message);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Payment initiation failed',
+      error: error.response?.data || error.message 
+    });
+  }
 });
 
 console.log('App configuration complete');
