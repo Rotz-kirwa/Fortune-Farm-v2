@@ -12,13 +12,7 @@ const app = express();
 console.log('Express app created');
 
 app.use(cors({
-  origin: [
-    "https://fortune-farm-murex.vercel.app",
-    "https://fortune-farm-git-main-eliuds-projects-ebf8c589.vercel.app",
-    "https://fortune-farm-6ci3e05b5-eliuds-projects-ebf8c589.vercel.app",
-    "https://fortune-farm-l762.vercel.app",
-    "http://localhost:5173"
-  ],
+  origin: "*",
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
