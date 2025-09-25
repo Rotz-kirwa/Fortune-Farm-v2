@@ -196,4 +196,4 @@ app.post('/api/test/add-balance', (req, res) => {
 });
 
 console.log('App configuration complete');
-module.exports = app;
+module.exports = app;// Force complete restart
