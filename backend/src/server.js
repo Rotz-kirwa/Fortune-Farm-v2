@@ -30,4 +30,4 @@ process.on('SIGTERM', () => {
   server.close(() => {
     process.exit(0);
   });
-});
+});// CORS fix v2
