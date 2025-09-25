@@ -1,8 +1,19 @@
 console.log('Loading app.js v3.0 with M-Pesa...');
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
 require('dotenv').config();
 console.log('Express and dependencies loaded');
+
+// M-Pesa Configuration
+const MPESA_CONFIG = {
+  consumer_key: process.env.MPESA_CONSUMER_KEY || 'QrUdWSBOAgCC8Ky60sGssRAA9NnNuy8rDxrWYGoBIEIOcxqn',
+  consumer_secret: process.env.MPESA_CONSUMER_SECRET || 'AXzu4uZeYD3GnFOTK9w8jnI0VjqC8R6LpKnGW0kgPaENuqvaJjAazi9J3KbfqBTz',
+  business_short_code: process.env.MPESA_SHORTCODE || '174379',
+  business_name: 'Fortune Farm',
+  passkey: process.env.MPESA_PASSKEY || 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919',
+  base_url: process.env.MPESA_BASE_URL || 'https://sandbox.safaricom.co.ke'
+};
 
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
@@ -48,9 +59,9 @@ app.post('/api/mpesa/callback', async (req, res) => {
         
         console.log(`Payment successful: ${amount} KES from ${phoneNumber}, Receipt: ${mpesaReceiptNumber}`);
         
-        // Extract user ID from AccountReference (format: FT{userId}_{timestamp})
+        // Extract user ID from AccountReference (format: FIXGOAL VENTURES_{userId}_{timestamp})
         const accountRef = metadata.find(item => item.Name === 'AccountReference')?.Value;
-        const userIdMatch = accountRef?.match(/FT(\d+)_/);
+        const userIdMatch = accountRef?.match(/FIXGOAL VENTURES_(\d+)_/);
         const userId = userIdMatch ? userIdMatch[1] : null;
         
         if (userId && userId !== 'guest') {
@@ -91,21 +102,15 @@ app.post('/api/mpesa/callback', async (req, res) => {
 
 app.post('/api/mpesa/stkpush', require('./middleware/auth').authenticateToken, async (req, res) => {
   try {
+    console.log('STK Push request:', req.body);
     const { phone_number, amount } = req.body;
-    
+    const userId = req.userId;
+
     if (!phone_number || !amount) {
       return res.status(400).json({ message: 'Phone number and amount required' });
     }
 
-    const MPESA_CONFIG = {
-      consumer_key: 'QrUdWSBOAgCC8Ky60sGssRAA9NnNuy8rDxrWYGoBIEIOcxqn',
-      consumer_secret: 'AXzu4uZeYD3GnFOTK9w8jnI0VjqC8R6LpKnGW0kgPaENuqvaJjAazi9J3KbfqBTz',
-      business_short_code: '174379',
-      passkey: 'bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919',
-      base_url: 'https://sandbox.safaricom.co.ke'
-    };
-
-    const axios = require('axios');
+    // Get M-Pesa access token
     const auth = Buffer.from(`${MPESA_CONFIG.consumer_key}:${MPESA_CONFIG.consumer_secret}`).toString('base64');
     
     const tokenResponse = await axios.get(`${MPESA_CONFIG.base_url}/oauth/v1/generate?grant_type=client_credentials`, {
@@ -125,21 +130,19 @@ app.post('/api/mpesa/stkpush', require('./middleware/auth').authenticateToken, a
       PartyA: phone_number,
       PartyB: MPESA_CONFIG.business_short_code,
       PhoneNumber: phone_number,
-      CallBackURL: 'https://fortune-farm.onrender.com/api/mpesa/callback',
-      AccountReference: `FT${req.user?.id || 'guest'}_${Date.now()}`,
+      CallBackURL: 'http://localhost:5000/api/mpesa/callback',
+      AccountReference: `FIXGOAL_${userId}_${Date.now()}`,
       TransactionDesc: 'Fortune Farm Deposit'
     };
 
-    const stkUrl = `${MPESA_CONFIG.base_url}/mpesa/stkpush/v1/processrequest`;
-    console.log('STK Push URL:', stkUrl);
-    
-    const response = await axios.post(stkUrl, stkPushData, {
+    const response = await axios.post(`${MPESA_CONFIG.base_url}/mpesa/stkpush/v1/processrequest`, stkPushData, {
       headers: {
         Authorization: `Bearer ${access_token}`,
         'Content-Type': 'application/json'
       }
     });
 
+    console.log('STK Push successful:', response.data);
     res.json({
       success: true,
       message: 'STK Push sent successfully',
@@ -147,21 +150,11 @@ app.post('/api/mpesa/stkpush', require('./middleware/auth').authenticateToken, a
     });
 
   } catch (error) {
-    console.error('=== STK Push Error Details ===');
-    console.error('Error message:', error.message);
-    console.error('Error status:', error.response?.status);
-    console.error('Error data:', JSON.stringify(error.response?.data, null, 2));
-    console.error('Request URL:', error.config?.url);
-    console.error('Request data:', JSON.stringify(error.config?.data, null, 2));
-    
+    console.error('STK Push Error:', error.response?.data || error.message);
     res.status(500).json({ 
       success: false, 
       message: 'Payment initiation failed',
-      error: error.response?.data || error.message,
-      details: {
-        status: error.response?.status,
-        url: error.config?.url
-      }
+      error: error.response?.data || error.message
     });
   }
 });
@@ -193,14 +186,42 @@ app.get('/api/status', (req, res) => {
 });
 
 // Temporary endpoint to add balance for testing
-app.post('/api/test/add-balance', (req, res) => {
-  const { amount } = req.body;
-  console.log(`Test: Adding ${amount} KES to user balance`);
-  res.json({ 
-    success: true, 
-    message: `Added ${amount} KES to balance`,
-    note: 'This is a test endpoint - in production, balance updates via M-Pesa callback'
-  });
+app.post('/api/test/add-balance', require('./middleware/auth').authenticateToken, async (req, res) => {
+  try {
+    const { amount } = req.body;
+    const userId = req.userId;
+    
+    const { initDatabase } = require('./config/database');
+    const db = await initDatabase();
+    
+    // Update user balance
+    await db.run(
+      'UPDATE users SET balance = balance + ? WHERE id = ?',
+      [amount, userId]
+    );
+    
+    console.log(`✅ Test: Added ${amount} KES to user ${userId} balance`);
+    
+    res.json({ 
+      success: true, 
+      message: `Added ${amount} KES to balance`,
+      note: 'Test endpoint - balance updated in database'
+    });
+  } catch (error) {
+    console.error('Test balance update error:', error);
+    res.status(500).json({ error: 'Failed to update balance' });
+  }
+});
+
+// Simple test endpoint without database
+app.get('/api/test/simple-balance', (req, res) => {
+  console.log('Simple balance test called');
+  res.json({ success: true, message: 'Test endpoint working' });
+});
+
+app.post('/api/test/simple-balance', (req, res) => {
+  console.log('Simple balance test called');
+  res.json({ success: true, message: 'Test endpoint working' });
 });
 
 console.log('App configuration complete');

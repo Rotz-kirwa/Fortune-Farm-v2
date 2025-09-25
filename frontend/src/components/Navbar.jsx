@@ -28,7 +28,7 @@ const Navbar = () => {
                 <Link to="/deposit" className="hover:text-green-300 text-green-400">Account</Link>
                 <div className="flex items-center space-x-2">
                   <User className="w-4 h-4" />
-                  <span className="hidden lg:inline">{user.user?.name}</span>
+                  <span className="hidden lg:inline">{user.name}</span>
                 </div>
                 <button 
                   onClick={logout}
@@ -65,7 +65,7 @@ const Navbar = () => {
                 <>
                   <div className="flex items-center space-x-2 px-2 py-1 bg-gray-700 rounded">
                     <User className="w-4 h-4" />
-                    <span>{user.user?.name}</span>
+                    <span>{user.name}</span>
                   </div>
                   {location.pathname !== '/' && (
                     <Link 

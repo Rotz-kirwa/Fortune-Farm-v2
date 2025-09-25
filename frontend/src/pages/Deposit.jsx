@@ -40,6 +40,40 @@ const Deposit = () => {
     <div className="min-h-screen bg-gray-900 pt-20 px-4">
       <div className="max-w-4xl mx-auto">
         <TestMpesa />
+        
+        {/* Test Balance Button for Local Development */}
+        <div className="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <h3 className="text-lg font-semibold text-yellow-800 mb-2">Local Testing</h3>
+          <button
+            onClick={async () => {
+              try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('http://localhost:5000/api/test/add-balance', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                  },
+                  body: JSON.stringify({ amount: 100 })
+                });
+                const data = await response.json();
+                if (data.success) {
+                  alert('✅ Added 100 KES to your balance! Check your dashboard.');
+                  // Refresh the page to show updated balance
+                  setTimeout(() => window.location.reload(), 1000);
+                } else {
+                  alert('❌ Failed to add balance: ' + (data.message || 'Unknown error'));
+                }
+              } catch (error) {
+                console.error('Error:', error);
+                alert('Error adding balance');
+              }
+            }}
+            className="bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700"
+          >
+            Add 100 KES (Test)
+          </button>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           
           {/* Deposit Section */}
